@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: eclinician
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql123  # Password for the 'root' user
+      MYSQL_DATABASE: eclinical        # Database name to create automatically
+      MYSQL_USER: cerison            # Username for MySQL
+      MYSQL_PASSWORD: mysql123       # Password for the user
+    volumes:
+      - mysql_data:/var/lib/mysql    # Persistent data storage
+    ports:
+      - "3307:3306"                  # Map port 3307 of the container to port 3306 on the host
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
