@@ -35,7 +35,7 @@ public class Patient {
     @NotBlank(message = "This field is required")
     private String phone;
 
-    @Column(nullable = true)
+    @Column(nullable = true, unique = true)
     private String email;
 
     @Column(nullable = false)

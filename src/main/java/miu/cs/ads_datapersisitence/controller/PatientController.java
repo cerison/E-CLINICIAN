@@ -1,6 +1,5 @@
 package miu.cs.ads_datapersisitence.controller;
 
-import miu.cs.ads_datapersisitence.dto.request.SimplePatientDto;
 import miu.cs.ads_datapersisitence.dto.response.PatientAppointmentDto;
 import miu.cs.ads_datapersisitence.exception.NotFoundException;
 import miu.cs.ads_datapersisitence.model.Appointment;

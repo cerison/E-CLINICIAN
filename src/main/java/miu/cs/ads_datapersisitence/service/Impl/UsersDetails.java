@@ -1,52 +1,35 @@
-package miu.cs.ads_datapersisitence.model;
+package miu.cs.ads_datapersisitence.service.Impl;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import miu.cs.ads_datapersisitence.enums.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import miu.cs.ads_datapersisitence.model.Role;
+import miu.cs.ads_datapersisitence.model.User;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
 
-
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+public class UsersDetails implements UserDetails {
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Data
-@Table(name = "users")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class User implements UserDetails, Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    private String name;
-
-    @Column(nullable = false, unique = true)
     private String email;
-
-    @Column(nullable = false)
+    @JsonIgnore
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-
     private List<Role> roles;
+
+    public UsersDetails(User user) {
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.roles = user.getRoles();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName().toString()))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public String getPassword() {

@@ -3,7 +3,6 @@ package miu.cs.ads_datapersisitence.controller;
 import miu.cs.ads_datapersisitence.dto.response.AddressDto;
 import miu.cs.ads_datapersisitence.exception.NotFoundException;
 import miu.cs.ads_datapersisitence.model.Address;
-import miu.cs.ads_datapersisitence.model.Patient;
 import miu.cs.ads_datapersisitence.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
