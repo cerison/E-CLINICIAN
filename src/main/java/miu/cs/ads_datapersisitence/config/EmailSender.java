@@ -1,28 +1,33 @@
 package miu.cs.ads_datapersisitence.config;
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import java.util.Properties;
+import io.github.cdimascio.dotenv.Dotenv;
 
-import java.io.UnsupportedEncodingException;
-
+@Configuration
 public class EmailSender {
-    private JavaMailSender mailSender;
-    public EmailSender(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
 
-    public void sendEmail(String email, String subject, String content) throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+    Dotenv dotenv = Dotenv.configure().load();
+    private String sender = dotenv.get("SENDER");
 
-        helper.setFrom("chernetbala@gmail.com", "CHERNET");
-        helper.setTo(email);
+    private String pwd  = dotenv.get("PWD");
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(465);
 
-        helper.setSubject(subject);
-        helper.setText(content, true);
+        mailSender.setUsername(sender);
+        mailSender.setPassword(pwd);
 
-        mailSender.send(message);
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
     }
 }

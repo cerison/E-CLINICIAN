@@ -14,15 +14,7 @@ import java.io.UnsupportedEncodingException;
 public class ManagerController {
 
     @Autowired
-    private MailSenderService mailService;
-
-    @Autowired
     ManagerService managerService;
-
-    @PostMapping("/send/{email}")
-    public void Foo(@PathVariable String email)  throws MessagingException, UnsupportedEncodingException {
-        mailService.sendNewMail(email, "Subject right here", "Body right there!");
-    }
 
     @PostMapping("/approve/{patientId}/{appointmentId}")
     public void approveRequest(@PathVariable Integer patientId, @PathVariable Integer appointmentId) throws NotFoundException {

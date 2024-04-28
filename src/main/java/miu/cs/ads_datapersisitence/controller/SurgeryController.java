@@ -37,7 +37,7 @@ public class SurgeryController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void addPatient(@RequestBody Surgery surgery) {
+    public void addSurgery(@RequestBody Surgery surgery) {
         surgeryService.addSurgery(surgery);
     }
 

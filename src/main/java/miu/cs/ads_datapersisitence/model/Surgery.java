@@ -21,7 +21,7 @@ public class Surgery {
     @NotBlank(message = "This field is required")
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
     @OneToMany

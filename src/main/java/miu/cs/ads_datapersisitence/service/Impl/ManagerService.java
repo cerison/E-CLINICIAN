@@ -14,6 +14,10 @@ public class ManagerService {
 
     @Autowired
     AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private MailSenderService mailService;
+
     public void approveRequest(Integer patientId, Integer appointmentId) throws NotFoundException {
         var patient = patientRepository.findById(patientId).orElse(null);
         var appt = appointmentRepository.findById(appointmentId).orElse(null);
@@ -23,6 +27,7 @@ public class ManagerService {
             throw new NotFoundException("Appointment is not available");
         }else {
             appointmentRepository.updatePatientAppointment(appointmentId,patientId);
+            mailService.sendEmail(patient.getEmail(), patient.getFname(), patient.getLname(),appt.getDate(),appt.getTime());
         }
     }
 }

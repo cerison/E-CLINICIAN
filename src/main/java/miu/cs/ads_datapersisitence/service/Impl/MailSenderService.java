@@ -1,28 +1,44 @@
 package miu.cs.ads_datapersisitence.service.Impl;
-
-import jakarta.mail.MessagingException;
-import miu.cs.ads_datapersisitence.config.EmailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.mail.internet.MimeMessage;
+import miu.cs.ads_datapersisitence.util.Confirm;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Service
+@Component
 public class MailSenderService {
 
-    public void sendNewMail(String to, String subject, String body) throws MessagingException, UnsupportedEncodingException {
+    private final JavaMailSender mailSender;
 
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    public MailSenderService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
-        EmailSender emailSender = new EmailSender(mailSender);
+    Dotenv dotenv = Dotenv.configure().load();
+    private String sender = dotenv.get("SENDER");
 
-        String recipientEmail = "chernetballa@gmail.com";
-        String content = "<p>Hello,</p><p>This is a test email sent from Spring Boot.</p>";
-
+    public void sendEmail(String to, String fname, String lname, LocalDate date, Time time) {
         try {
-            emailSender.sendEmail(to, subject, content);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom(sender);
+            helper.setTo(sender);
+            helper.setSubject("Appointment Confirmation – "+date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
+
+            String htmlContent = new Confirm().confirmation(fname,lname,date,time);
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
             System.out.println("Email sent successfully.");
-        } catch (MessagingException | UnsupportedEncodingException e) {
+        } catch (Exception e) {
             System.out.println("Failed to send email. Error: " + e.getMessage());
         }
     }

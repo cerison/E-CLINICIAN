@@ -41,9 +41,9 @@ public class DentistController {
         dentistService.addDentist(dentist);
     }
 
-    @PostMapping("/appointment/{pid}/{aid}")
-    public void addAppointment(@PathVariable  Integer pid, @PathVariable  Integer aid)   throws NotFoundException{
-        dentistService.addAppointment(pid, aid);
+    @PostMapping("/appointment/{did}/{aid}")
+    public void addAppointment(@PathVariable  Integer did, @PathVariable  Integer aid)   throws NotFoundException{
+        dentistService.addAppointment(did, aid);
     }
 
     @PutMapping("/{id}")
